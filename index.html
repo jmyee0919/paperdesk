@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paperdesk · Research workspace</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Paperdesk home"><span class="brand-mark" data-icon="mark"></span>Paperdesk</a>
+    <span class="mast-divider"></span><span class="mast-label">Research workspace</span>
+    <div class="mast-actions"><button class="connection" id="connection" type="button"><span class="connection-dot"></span><span id="connection-label">Checking connection</span></button><button class="icon-button" id="settings-open" type="button" title="Settings" aria-label="Settings" data-icon="settings"></button></div>
+  </header>
+  <main class="workspace" id="workspace">
+    <aside class="sidebar" aria-label="Paper library">
+      <div class="side-top">
+        <div class="side-heading"><h2>Library</h2><button class="icon-button" id="find-open" type="button" aria-label="Find a paper" title="Find a paper (Ctrl+K)" data-icon="search"></button></div>
+        <div class="import-row"><button class="import-button" id="import" type="button"><span data-icon="plus"></span> Add PDF</button><button class="icon-button folder-add" id="folder-add" type="button" aria-label="New folder" title="New folder" data-icon="folder-plus"></button></div>
+        <input type="file" id="paper-files" accept=".pdf,application/pdf" multiple hidden>
+        <input class="search-input" type="search" id="find" placeholder="Search by title, author, or tag" aria-label="Search library">
+      </div>
+      <nav class="collections" id="collections" aria-label="Library folders"></nav>
+      <div class="collection-label"><span id="collection-name">All papers</span><span class="collection-count" id="library-count">0</span><select id="paper-sort" aria-label="Sort papers" title="Sort papers"><option value="added">Recently added</option><option value="opened">Recently opened</option><option value="title">Title</option></select></div>
+      <div id="papers" class="papers"></div>
+      <div class="sidebar-foot"><button class="ghost-button" id="lab-open" type="button"><span data-icon="spark"></span> Research Lab <span class="push" data-icon="arrow-up-right"></span></button><button class="ghost-button" id="workflows-open" type="button"><span data-icon="route"></span> ARS workflows <span class="push" data-icon="arrow-up-right"></span></button></div>
+    </aside>
+    <section class="reading" aria-label="Original PDF">
+      <header class="reading-header">
+        <div class="reading-pointer"><span data-icon="file"></span><span id="reading-title">PDF reader</span></div>
+        <div class="reading-actions"><button class="icon-button" id="pdf-find-open" type="button" aria-label="Search PDF" title="Search PDF (Ctrl+F)" data-icon="search"></button><button class="icon-button" id="bookmark-toggle" type="button" aria-label="Bookmark this page" title="Bookmark this page" aria-pressed="false" data-icon="bookmark"></button><button class="icon-button" id="reader-tools-open" type="button" aria-label="Bookmarks and excerpts" title="Bookmarks and excerpts" data-icon="list"></button><button class="icon-button" id="document-info" type="button" aria-label="Paper details" title="Paper details" data-icon="info"></button><button class="icon-button" id="focus" type="button" aria-pressed="false" aria-label="Focus mode" title="Focus mode" data-icon="expand"></button></div>
+      </header>
+      <form id="pdf-find-form" class="pdf-find" hidden><input id="pdf-query" type="search" aria-label="Search term for the PDF" placeholder="Find in PDF" autocomplete="off"><span id="pdf-matches" role="status"></span><button class="icon-button" id="find-prev" type="button" aria-label="Previous match" data-icon="left"></button><button class="icon-button" id="find-next" type="button" aria-label="Next match" data-icon="right"></button><button class="icon-button" id="pdf-find-close" type="button" aria-label="Close PDF search" data-icon="close"></button></form>
+      <div class="pdf-scroll" id="pdf-view"><div class="reader-empty">Opening PDF…</div></div>
+      <div class="floating-controls" aria-label="PDF page controls and zoom">
+        <button class="icon-button" id="previous" type="button" aria-label="Previous page" data-icon="left"></button>
+        <label class="page-counter"><input type="number" id="page-number" aria-label="Page number" min="1" value="1"> <span>/ <span id="page-total">–</span></span></label>
+        <button class="icon-button" id="next" type="button" aria-label="Next page" data-icon="right"></button>
+        <span class="control-divider"></span>
+        <button class="icon-button" id="zoom-out" type="button" aria-label="Zoom out" data-icon="minus"></button>
+        <button class="zoom-label" id="zoom-reset" type="button" title="Fit to width">100%</button>
+        <button class="icon-button" id="zoom-in" type="button" aria-label="Zoom in" data-icon="plus"></button>
+      </div>
+      <div class="selection-action" id="selection-actions" hidden><button id="ask-selection" type="button"><span data-icon="spark"></span> Ask about selection</button><button id="clip-selection" type="button"><span data-icon="quote"></span> Save excerpt</button></div>
+      <div class="panel-splitter" id="panel-splitter" tabindex="0" role="separator" aria-label="Resize the assistant panel" aria-orientation="vertical" aria-valuemin="285" aria-valuemax="620" aria-valuenow="400" aria-controls="assistant-panel" title="Drag or use the arrow keys to resize the assistant panel"></div>
+    </section>
+    <aside class="assistant" id="assistant-panel" aria-label="AI research assistant panel">
+      <header class="assistant-header"><div class="assistant-mark" data-icon="spark"></div><div><h2>Research assistant</h2><div class="assistant-subtitle" id="assistant-subtitle">Answers grounded in your papers</div></div></header>
+      <div class="tabs" aria-label="Research assistant views"><button type="button" data-tab="chat" aria-pressed="true">Chat</button><button type="button" data-tab="analysis" aria-pressed="false">Deep analysis</button><button type="button" data-tab="lab" aria-pressed="false">Research Lab</button><button type="button" data-tab="research" aria-pressed="false">Workflows</button></div>
+      <div class="assistant-body" id="assistant-body" aria-live="polite"></div>
+      <form id="chat-form" class="composer" autocomplete="off">
+        <div class="selection-pill" id="selection-pill" hidden><span data-icon="quote"></span><span id="selection-label"></span><button type="button" id="clear-selection" class="icon-button" aria-label="Remove selected passage" data-icon="close"></button></div>
+        <label for="question" class="sr-only">Ask a question</label><textarea id="question" rows="2" placeholder="Ask a question about this paper"></textarea>
+        <div class="chat-model-controls"><select id="chat-quality" aria-label="Model for this question"><option value="auto">Auto</option><option value="astra">Review with Astra</option></select></div>
+        <div class="composer-actions"><span id="composer-status">Enter to send · Shift+Enter for a new line</span><button class="small-button" id="chat-stop" type="button" hidden>Stop</button><button class="send-button" id="send" type="submit" aria-label="Send question" title="Send question" data-icon="up"></button></div>
+      </form>
+    </aside>
+  </main>
+  <dialog id="settings-dialog" class="dialog">
+    <div class="dialog-header"><div><span class="dialog-kicker">PAPERDESK</span><h2>AI connection</h2></div><button class="icon-button" data-close="settings-dialog" type="button" aria-label="Close" data-icon="close"></button></div>
+    <form id="settings-form">
+      <label class="field-label" for="engine">AI provider</label><select id="engine"><option value="codex">Codex · Signed-in ChatGPT account</option><option value="api">OpenAI Responses API · API key</option></select>
+      <p class="field-help" id="engine-info"></p>
+      <div id="key-fields" hidden><label class="field-label" for="key">OpenAI API key</label><input id="key" type="password" autocomplete="off" placeholder="sk-…"><p class="field-help" id="key-info">The key is kept in memory for this session.</p></div>
+      <div class="settings-section"><div><strong>ARS-Codex workflows</strong><p id="ars-info" class="field-help"></p></div><button id="install-ars" class="small-button" type="button">Install</button></div>
+      <div class="settings-section"><div><strong>Automatic model selection</strong><p class="field-help">Routine questions and extraction use GPT-6.2 Sol at High. Deep analysis and complex judgments use GPT-6.2 Astra.</p></div></div>
+      <p id="settings-error" class="form-error" role="status"></p>
+      <div class="dialog-footer"><button class="primary-button" type="submit">Save settings</button></div>
+    </form>
+  </dialog>
+  <dialog id="paper-dialog" class="dialog">
+    <div class="dialog-header"><h2>Paper details</h2><button class="icon-button" data-close="paper-dialog" type="button" aria-label="Close" data-icon="close"></button></div>
+    <dl id="paper-details" class="details"></dl>
+    <form id="notes-form"><label class="field-label" for="paper-title-edit">Library title</label><input id="paper-title-edit" required maxlength="240"><div class="field-grid"><label class="field-label">Folder<select id="paper-folder-edit"></select></label><label class="field-label">Reading status<select id="paper-status-edit"><option value="unread">To read</option><option value="reading">Reading</option><option value="done">Read</option></select></label></div><label class="field-label" for="paper-tags-edit">Tags</label><input id="paper-tags-edit" placeholder="e.g. CT, radiomics" maxlength="300"><label class="field-label" for="paper-note">My notes</label><textarea id="paper-note" rows="4" placeholder="Save your thoughts for later"></textarea><div class="document-tools"><button id="paper-download" class="small-button" type="button">Download PDF</button><button id="paper-export" class="small-button" type="button">Export Markdown</button></div><div class="dialog-footer document-footer"><button id="paper-trash" class="small-button danger-text" type="button">Move to trash</button><button class="primary-button" type="submit">Save changes</button></div></form>
+  </dialog>
+  <dialog id="folder-dialog" class="dialog"><div class="dialog-header"><h2 id="folder-heading">New folder</h2><button class="icon-button" data-close="folder-dialog" type="button" aria-label="Close" data-icon="close"></button></div><form id="folder-form"><label class="field-label" for="folder-name">Folder name</label><input id="folder-name" required maxlength="60"><p class="form-error" id="folder-error" role="status"></p><div class="dialog-footer"><button id="folder-delete" class="small-button danger-text" type="button" hidden>Delete folder</button><button class="primary-button" type="submit">Save</button></div></form></dialog>
+  <dialog id="reader-tools" class="dialog"><div class="dialog-header"><h2>Bookmarks and excerpts</h2><button class="icon-button" data-close="reader-tools" type="button" aria-label="Close" data-icon="close"></button></div><div id="saved-reader-items" class="saved-reader-items"></div></dialog>
+  <dialog id="confirm-dialog" class="dialog"><form method="dialog"><div class="dialog-header"><h2 id="confirm-heading"></h2></div><p id="confirm-copy" class="field-help"></p><div class="dialog-footer"><button class="small-button" value="cancel" autofocus>Cancel</button><button class="primary-button danger-button" value="confirm">Delete</button></div></form></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+export const revision = 'd300ddcccb3d0de6ea76c27b41b1c3da775e3d4b';
+export const suiteVersion = '3.24.5+codex.1';
+export const suiteUrl = 'https://github.com/Imbad0202/academic-research-skills-codex';
+
+export const workflows = [
+  { id: 'deep-research', mark: 'search', title: 'Literature research', description: 'Research questions, literature reviews, systematic reviews, and meta-analysis', modes: [['socratic','Frame a research question'],['full','In-depth research'],['quick','Quick research'],['review','Evaluate evidence'],['lit-review','Literature review'],['three-way-scan','WHY/HOW/WHAT scan'],['systematic-review','Systematic review & meta-analysis'],['fact-check','Fact-check']] },
+  { id: 'academic-paper', mark: 'write', title: 'Manuscript writing', description: 'IMRaD outline, abstract, draft, revision, and citation checks', modes: [['plan','Plan the manuscript'],['outline-only','Manuscript outline'],['abstract-only','Draft an abstract'],['full','Draft the manuscript'],['lit-review','Literature review manuscript'],['revision','Revise'],['revision-coach','Respond to reviewers'],['citation-check','Check citations'],['disclosure','AI disclosure'],['format-convert','Convert format'],['rebuttal-audit','Audit a rebuttal']] },
+  { id: 'academic-paper-reviewer', mark: 'check', title: 'Manuscript review', description: 'Simulated peer review, editorial decision, and re-review', modes: [['full','Simulated peer review'],['re-review','Re-review'],['quick','Quick review'],['methodology-focus','Methods-focused review'],['guided','Guided improvements'],['calibration','Reviewer calibration']] },
+  { id: 'academic-pipeline', mark: 'route', title: 'Research pipeline', description: 'Study design, integrity checks, review, and revision', modes: [['','Research to manuscript']] },
+  { id: 'sr-screener', mark: 'filter', title: 'Study screening', description: 'Eligibility criteria, pilot screening, and title, abstract, or full-text screening', modes: [['protocol','Protocol'],['quick','Quick screening'],['pilot','Pilot'],['ta-screen','Title & abstract screening'],['ft-screen','Full-text screening'],['adjudicate','Adjudicate disagreements'],['audit','Quality audit'],['report','Report']] },
+  { id: 'experiment-agent', mark: 'flask', title: 'Experiment design', description: 'Experiment planning, execution, progress tracking, and reproducibility checks', modes: [['plan','Plan an experiment'],['run','Run experiment code'],['manage','Track research progress'],['validate','Validate statistics & reproducibility']] },
+];
